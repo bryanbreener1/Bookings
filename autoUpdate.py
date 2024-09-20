@@ -2,15 +2,15 @@ import pandas as pd
 from dbfread import DBF
 import math 
 import requests
-from constantes import PRODUCTO_PATH, END_POINT_CLOUD_FUNCTIONS, PRECIOS_PATH
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import logging
-import sys
-import os
-
-sys.path.append(os.path.abspath('..'))
+from constantes import PRODUCTO_PATH, END_POINT_CLOUD_FUNCTIONS, PRECIOS_PATH
 
 logging.basicConfig(filename='autoUpdate.log', level=logging.INFO, 
                     format='%(asctime)s %(levelname)s %(message)s')
+
+
 
 #funcion para actualizar precios, se ejecuta cuando watchDog detecta un cambio
 def update_prices_auto():

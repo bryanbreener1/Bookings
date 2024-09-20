@@ -2,7 +2,7 @@ import os
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from AutoUpdate.autoUpdate import update_prices_auto, update_products_auto
+from autoUpdate import update_prices_auto, update_products_auto
 import logging
 from constantes import DIR_TO_WATCH, PRECIOS_PATH, PRODUCTO_PATH
 

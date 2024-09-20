@@ -8,6 +8,7 @@ import logging
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
 import json
+import config_imports
 from constantes import PEDIDO_C_PATH, PEDIDO_D_PATH, PRODUCTO_PATH
 
 app = Flask(__name__)
