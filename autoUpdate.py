@@ -76,4 +76,3 @@ def update_products_auto():
 
     except requests.exceptions.RequestException as e:
         logger.error(e)
-

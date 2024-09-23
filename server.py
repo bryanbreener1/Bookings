@@ -136,7 +136,7 @@ def roomsByCategory():
             categoryName = categoryName + ' CON TERRAZA' if product['CVEDE1'] == 2 else categoryName
             is_different_key = not (product['CVE_PROD'] in [room['productKey'] for room in rooms_busy])
 
-            if (categoryName in category) and is_different_key: 
+            if (categoryName in category) and is_different_key and (product['CSE_PROD'] == 'SUITES' or product['CSE_PROD'] == 'JUNIORSUIT'): 
                 rooms_availables.append({
                 "availabilityStatus": "available",
                 "description": product['DESC_PROD'],
