@@ -128,12 +128,14 @@ def roomsByCategory():
             pedido_check_out = pedido_check_in + relativedelta(years=years, months=months)
 
             if not (pedido_check_out <= check_in or pedido_check_in >= check_out):
-                categoryName = next((room['CSE_PROD'] + ' con terraza' if room['CVEDE1'] == 2 else room['CSE_PROD'] for index, room in products.iterrows() if room['CVE_PROD'] == row['CVE_PROD']),None)
-                rooms_busy.append({'productKey':row['CVE_PROD'], "category":categoryName})
+                #categoryName = next((room['CSE_PROD'] + ' con terraza' if room['CVEDE1'] == 2 else room['CSE_PROD'] for index, room in products.iterrows() if room['CVE_PROD'] == row['CVE_PROD']),None)
+                rooms_busy.append({'productKey':row['CVE_PROD']})
                      
         for index, product in products.iterrows():
             categoryName = 'SUITE' if product['CSE_PROD'] == 'SUITES' else 'JR SUITE'
+            categoryName = categoryName + ' CON TERRAZA' if product['CVEDE1'] == 2 else categoryName
             is_different_key = not (product['CVE_PROD'] in [room['productKey'] for room in rooms_busy])
+
             if (categoryName in category) and is_different_key: 
                 rooms_availables.append({
                 "availabilityStatus": "available",
@@ -147,7 +149,7 @@ def roomsByCategory():
                 "status": "active",
                 "stock": 1,
                 "unity": "m2",
-                "categoryName":categoryName + ' CON TERRAZA' if product['CVEDE1'] == 2 else categoryName,
+                "categoryName":categoryName,
                 "productKey": int(product['CVE_PROD']) 
                 })
         
