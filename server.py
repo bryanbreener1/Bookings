@@ -132,7 +132,7 @@ def roomsByCategory():
                 rooms_busy.append({'productKey':row['CVE_PROD'], "category":categoryName})
                      
         for index, product in products.iterrows():
-            categoryName = product['CSE_PROD'] + ' con terraza' if product['CVEDE1'] == 2 else product['CSE_PROD']
+            categoryName = 'SUITE' if product['CSE_PROD'] == 'SUITES' else 'JR SUITE'
             is_different_key = not (product['CVE_PROD'] in [room['productKey'] for room in rooms_busy])
             if (categoryName in category) and is_different_key: 
                 rooms_availables.append({
@@ -147,7 +147,7 @@ def roomsByCategory():
                 "status": "active",
                 "stock": 1,
                 "unity": "m2",
-                "categoryName":categoryName,
+                "categoryName":categoryName + ' CON TERRAZA' if product['CVEDE1'] == 2 else categoryName,
                 "productKey": int(product['CVE_PROD']) 
                 })
         
