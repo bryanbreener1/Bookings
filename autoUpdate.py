@@ -5,8 +5,12 @@ import requests
 import logging
 from constantes import PRODUCTO_PATH, END_POINT_CLOUD_FUNCTIONS, PRECIOS_PATH
 
-logging.basicConfig(filename='autoUpdate.log', level=logging.INFO, 
-                    format='%(asctime)s %(levelname)s %(message)s')
+logger = logging.getLogger('autoupdate_logger')
+handler = logging.FileHandler('autoUpdate.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 #funcion para actualizar precios, se ejecuta cuando watchDog detecta un cambio
 def update_prices_auto():

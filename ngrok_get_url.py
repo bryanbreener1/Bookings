@@ -2,8 +2,12 @@ import requests
 import logging
 from constantes import END_POINT_CLOUD_FUNCTIONS
 
-logging.basicConfig(filename='ngrok_url.log', level=logging.INFO, 
-                    format='%(asctime)s %(levelname)s %(message)s')
+logger = logging.getLogger('ngrok_url_logger')
+handler = logging.FileHandler('ngrok_url.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 ngrok_api_url = 'http://localhost:4040/api/tunnels'
 response = requests.get(ngrok_api_url)

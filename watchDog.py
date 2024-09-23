@@ -6,8 +6,12 @@ from autoUpdate import update_prices_auto, update_products_auto
 import logging
 from constantes import DIR_TO_WATCH, PRECIOS_PATH, PRODUCTO_PATH
 
-logging.basicConfig(filename='nucleaWatchDog.log', level=logging.INFO, 
-                    format='%(asctime)s %(levelname)s %(message)s')
+logger = logging.getLogger('watchdog_logger')
+handler = logging.FileHandler('nucleaWatchDog.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 logging.info('Script Watchdog iniciado')
 

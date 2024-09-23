@@ -11,8 +11,12 @@ from constantes import PEDIDO_D_PATH, PRODUCTO_PATH
 import json
 app = Flask(__name__)
 
-logging.basicConfig(filename='autoUpdate.log', level=logging.INFO, 
-                    format='%(asctime)s %(levelname)s %(message)s')
+logger = logging.getLogger('server_logger')
+handler = logging.FileHandler('server.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 @app.route('/availabilityCategory', methods=['GET', 'OPTIONS', 'POST'])
 def availabilityCategory():
