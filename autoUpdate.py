@@ -2,15 +2,11 @@ import pandas as pd
 from dbfread import DBF
 import math 
 import requests
-import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import logging
 from constantes import PRODUCTO_PATH, END_POINT_CLOUD_FUNCTIONS, PRECIOS_PATH
 
 logging.basicConfig(filename='autoUpdate.log', level=logging.INFO, 
                     format='%(asctime)s %(levelname)s %(message)s')
-
-
 
 #funcion para actualizar precios, se ejecuta cuando watchDog detecta un cambio
 def update_prices_auto():
@@ -33,9 +29,6 @@ def update_prices_auto():
 
     except requests.exceptions.RequestException as e:
         logging.error(f"error in update_prices_auto: {e}")
-
-
-
 
 #funcion para actualizar productos, se ejecuta cuando watchDog detecta un cambio
 def update_products_auto():

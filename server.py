@@ -7,11 +7,12 @@ from flask import jsonify
 import logging
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
+from constantes import PEDIDO_D_PATH, PRODUCTO_PATH
 import json
-import config_imports
-from constantes import PEDIDO_C_PATH, PEDIDO_D_PATH, PRODUCTO_PATH
-
 app = Flask(__name__)
+
+logging.basicConfig(filename='autoUpdate.log', level=logging.INFO, 
+                    format='%(asctime)s %(levelname)s %(message)s')
 
 @app.route('/availabilityCategory', methods=['GET', 'OPTIONS', 'POST'])
 def availabilityCategory():
@@ -32,7 +33,6 @@ def availabilityCategory():
  
         check_in = datetime.strptime(request.args.get('check_in'),'%Y-%m-%d %H:%M:%S.%f')
         check_out = datetime.strptime(request.args.get('check_out'), '%Y-%m-%d %H:%M:%S.%f')
-
         
         for index, row in pedidos.iterrows():
             if row['FECHA_ENT'] == None:
@@ -42,8 +42,6 @@ def availabilityCategory():
                 pedido_check_in = datetime.combine(row['FECHA_ENT'], datetime.min.time())
             else:
                 pedido_check_in = row['FECHA_ENT']
-                
-
             total_months = int(row['CANT_PROD'])
             years = total_months // 12
             months = total_months % 12
@@ -104,10 +102,10 @@ def roomsByCategory():
  
         check_in = datetime.strptime(request.args.get('check_in'),'%Y-%m-%d %H:%M:%S.%f')
         check_out = datetime.strptime(request.args.get('check_out'), '%Y-%m-%d %H:%M:%S.%f')
-        #category =json.loads( request.args.get('category'))
-        category =request.args.get('category')
-        print(category)
-        print(type(category))
+        category = request.args.get('category')
+        category = category.replace("'", '"')
+
+        category =json.loads(category)
 
         for index, row in pedidos.iterrows():
             if row['FECHA_ENT'] == None:
