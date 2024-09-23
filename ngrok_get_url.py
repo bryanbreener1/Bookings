@@ -19,7 +19,7 @@ if response.status_code == 200:
     try:
         response = requests.post(f'{END_POINT_CLOUD_FUNCTIONS}/update_ngrok_url', json=url)
         response.raise_for_status() 
-        logging(f"La URL pública de ngrok es: {public_url}")
+        logger.info(f"La URL pública de ngrok es: {public_url}")
 
     except requests.exceptions.RequestException as e:
         logger.error(e)
