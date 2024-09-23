@@ -1,4 +1,7 @@
 constantes.py
 constantes_dev.py
-/__pycache__
+__pycache__/
+autoUpdate.log
+ngrok_url.log
+server.log
 .vscode
