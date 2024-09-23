@@ -82,7 +82,7 @@ def availabilityCategory():
     except Exception as e:
             tb = traceback.format_exc()
             error = f"An error occurred: {e}, traceback: {tb}"
-            logging.error(error)
+            logger.error(error)
             result = jsonify({"error": error, "tb": tb})
             return (result, 500, HEADERS_ORIGIN)
 
@@ -156,7 +156,7 @@ def roomsByCategory():
     except Exception as e:
             tb = traceback.format_exc()
             error = f"An error occurred: {e}, traceback: {tb}"
-            logging.error(error)
+            logger.error(error)
             result = jsonify({"error": error, "tb": tb})
             return (result, 500, HEADERS_ORIGIN)
 

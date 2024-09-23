@@ -22,7 +22,7 @@ if response.status_code == 200:
         logging(f"La URL pública de ngrok es: {public_url}")
 
     except requests.exceptions.RequestException as e:
-        logging.error(e)
+        logger.error(e)
  
 else:
-    logging.error("No se pudo obtener la URL de ngrok.")
+    logger.error("No se pudo obtener la URL de ngrok.")

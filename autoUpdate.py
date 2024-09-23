@@ -29,10 +29,10 @@ def update_prices_auto():
     try:
         response = requests.post(f'{END_POINT_CLOUD_FUNCTIONS}/update_prices_coming_from_core_server', json=server_data)
         response.raise_for_status() 
-        logging.info(f"Cloud Function response: {response.status_code} - {response.text}")
+        logger.info(f"Cloud Function response: {response.status_code} - {response.text}")
 
     except requests.exceptions.RequestException as e:
-        logging.error(f"error in update_prices_auto: {e}")
+        logger.error(f"error in update_prices_auto: {e}")
 
 #funcion para actualizar productos, se ejecuta cuando watchDog detecta un cambio
 def update_products_auto():
@@ -72,8 +72,8 @@ def update_products_auto():
         print('envio la peticion al GCP')
         response = requests.post(f'{END_POINT_CLOUD_FUNCTIONS}/update_products', json=server_data)
         response.raise_for_status() 
-        logging.info(f"Cloud Function response: {response.status_code} - {response.text}")
+        logger.info(f"Cloud Function response: {response.status_code} - {response.text}")
 
     except requests.exceptions.RequestException as e:
-        logging.error(e)
+        logger.error(e)
 
