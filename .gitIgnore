@@ -1,2 +1,4 @@
 constantes.py
 constantes_dev.py
+/__pycache__
+.vscode
