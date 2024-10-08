@@ -7,7 +7,7 @@ from flask import jsonify
 import logging
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
-from constantes import PEDIDO_D_PATH, PRODUCTO_PATH
+from constantes import PEDIDO_D_PATH, PRODUCTO_PATH, CLIENTS_VP_PATH, SUBZONAS_VP_PATH, PRODUCTO_VP_PATH, PRECIPROD_VP_PATH
 import json
 app = Flask(__name__)
 
@@ -18,6 +18,7 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.INFO)
 
+#CORESUITES
 @app.route('/availabilityCategory', methods=['GET', 'OPTIONS', 'POST'])
 def availabilityCategory():
     if request.method == 'OPTIONS':
@@ -82,11 +83,11 @@ def availabilityCategory():
     except Exception as e:
             tb = traceback.format_exc()
             error = f"An error occurred: {e}, traceback: {tb}"
-            logger.error(error)
+            logger.error({"CORESUITES": error})
             result = jsonify({"error": error, "tb": tb})
             return (result, 500, HEADERS_ORIGIN)
 
-        
+#CORESUITES
 @app.route('/roomsByCategory', methods=['GET', 'OPTIONS', 'POST'])
 def roomsByCategory():
     if request.method == 'OPTIONS':
@@ -158,9 +159,101 @@ def roomsByCategory():
     except Exception as e:
             tb = traceback.format_exc()
             error = f"An error occurred: {e}, traceback: {tb}"
-            logger.error(error)
+            logger.error({"CORESUITES": error})
             result = jsonify({"error": error, "tb": tb})
             return (result, 500, HEADERS_ORIGIN)
 
+#VILLA PLATA
+departamentos = [215,307,306,214,507,314,315,207,514,515,415,406,506,407,414,407]
+def getRoomsAvailable():
+    client_db = CLIENTS_VP_PATH
+    client_decoded = DBF(client_db, encoding='cp1252')  
+    clients = pd.DataFrame(iter(client_decoded))
+    
+    sub_zonas_db = SUBZONAS_VP_PATH
+    sub_zonas_decoded = DBF(sub_zonas_db, encoding='cp1252')
+    sub_zonas = pd.DataFrame(iter(sub_zonas_decoded))
+    
+    rooms_busy = []
+    for index, row in clients.iterrows():
+        if(row['CVEDE3'] == 1 and row['CVE_SUB'] != 99999):
+            rooms_busy.append(row['CVE_SUB'])
+            
+    rooms_available = []
+    for index, row in sub_zonas.iterrows():
+        if(row['CVE_SUB'] not in rooms_busy and row['CVE_SUB'] != 99999):
+            rooms_available.append({
+                "CVE_ZON": row['CVE_ZON'],
+                "CVE_SUB":row['CVE_SUB'],
+                "NOM_SUB":row['NOM_SUB']
+            })
+            
+    return rooms_available
+
+def getPriceProducts():
+    products_db = PRODUCTO_VP_PATH
+    products_decoded = DBF(products_db, encoding='cp1252')
+    products = pd.DataFrame(iter(products_decoded))
+    
+    prices_db = PRECIPROD_VP_PATH
+    prices_decoded = DBF(prices_db, encoding='cp1252')
+    prices = pd.DataFrame(iter(prices_decoded))
+    
+    products_relevants = []
+    for index, row  in products.iterrows():
+        if row['CSE_PROD'] == 'RESIDENTES':
+            products_relevants.append(row)
+    
+    price_per_product = [ ]
+    for index, row in prices.iterrows():
+        if row['CVE_PROD'] in [product['CVE_PROD'] for product in products_relevants]:
+            price_per_product.append({
+                "clave_Prod": row['CVE_PROD'],
+                "type": row['NLISPRE'],
+                "price": row['LPRECPROD']
+            })
+    return price_per_product
+
+@app.route('/availability_villa_plata', methods=['GET', 'POST', 'OPTIONS'])
+def availability():
+    if request.method == 'OPTIONS':
+        return ('', 204, HEADERS_OPTIONS_POST)
+
+    try:
+        rooms_availables = getRoomsAvailable()
+        if len(rooms_availables) > 0:
+            return jsonify(rooms_availables), 200, HEADERS_ORIGIN
+        else:
+            logger.info({"VILLAPLATA": "se hizo una solicitud con exito a availability_villa_plata"})
+            return jsonify({"message": "No hay habitaciones disponibles"}), 200, HEADERS_ORIGIN
+
+    except Exception as e:
+            tb = traceback.format_exc()
+            error = f"An error occurred: {e}, traceback: {tb}"
+            logger.error({"VILLAPLATA": error})
+            result = jsonify({"error": error, "tb": tb})
+            return (result, 500, HEADERS_ORIGIN)
+
+@app.route('/prices_villa_plata', methods=['GET', 'POST', 'OPTIONS'])
+def prices():
+    if request.method == 'OPTIONS':
+        return ('', 204, HEADERS_OPTIONS_POST)
+
+    try:
+        rooms_availables = getRoomsAvailable()
+        if len(rooms_availables) > 0:
+            prices = getPriceProducts()
+            return jsonify(prices), 200, HEADERS_ORIGIN
+        else:
+            logger.info({"VILLAPLATA": "se hizo una solicitud con exito a prices_villa_plata"})
+            return jsonify({"message": "No hay habitaciones disponibles"}), 200, HEADERS_ORIGIN
+
+    except Exception as e:
+            tb = traceback.format_exc()
+            error = f"An error occurred: {e}, traceback: {tb}"
+            logger.error({"VILLAPLATA": error})
+            result = jsonify({"error": error, "tb": tb})
+            return (result, 500, HEADERS_ORIGIN)
+        
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

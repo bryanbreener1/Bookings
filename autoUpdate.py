@@ -3,7 +3,7 @@ from dbfread import DBF
 import math 
 import requests
 import logging
-from constantes import PRODUCTO_PATH, END_POINT_CLOUD_FUNCTIONS, PRECIOS_PATH
+from constantes import PRODUCTO_PATH, END_POINT_CLOUD_FUNCTIONS, PRECIOS_PATH, PRODUCTO_VP_PATH, PRECIPROD_VP_PATH
 
 logger = logging.getLogger('autoupdate_logger')
 handler = logging.FileHandler('autoUpdate.log')
@@ -36,7 +36,6 @@ def update_prices_auto():
 
 #funcion para actualizar productos, se ejecuta cuando watchDog detecta un cambio
 def update_products_auto():
-    print('ejecuto la funcion update products auto')
     product_db = PRODUCTO_PATH
     product_decoded = DBF(product_db, encoding='cp1252')  
     products = pd.DataFrame(iter(product_decoded))
@@ -69,10 +68,50 @@ def update_products_auto():
             
     server_data = {"products": product_list}
     try:
-        print('envio la peticion al GCP')
         response = requests.post(f'{END_POINT_CLOUD_FUNCTIONS}/update_products', json=server_data)
         response.raise_for_status() 
         logger.info(f"Cloud Function response: {response.status_code} - {response.text}")
 
     except requests.exceptions.RequestException as e:
         logger.error(e)
+        
+#update villa plata products     
+def update_products_auto_VP():
+    product_db = PRODUCTO_VP_PATH
+    product_decoded = DBF(product_db, encoding='cp1252')  
+    products = pd.DataFrame(iter(product_decoded))
+
+    price_prod_db = PRECIPROD_VP_PATH
+    price_decoded = DBF(price_prod_db, encoding='cp1252')  
+    prices = pd.DataFrame(iter(price_decoded))
+
+    product_list = []
+
+    for index, product in products.iterrows():
+        if product['CSE_PROD'] == 'RESIDENTES':
+            product_list.append({
+                "CSE_PROD": product['CSE_PROD'],
+                "CVE_PROD": product['CVE_PROD'],
+                "DESC_PROD": product['DESC_PROD'],
+                "prices":[]
+            })
+    product_list_cve = [product['CVE_PROD'] for product in product_list]
+    for index, prices in prices.iterrows():
+        indice = product_list_cve.index(prices['CVE_PROD']) if prices['CVE_PROD'] in product_list_cve else -1
+        prices
+        if indice != -1:
+            product_list[indice]['prices'].append({
+                    "type": prices['NLISPRE'],
+                    "price": prices['LPRECPROD']
+            })
+                        
+    server_data = {"products": product_list}
+    try:
+        response = requests.post(f'{END_POINT_CLOUD_FUNCTIONS}/update_products_villa_plata', json=server_data)
+        response.raise_for_status() 
+        logger.info(f"Cloud Function response: {response.status_code} - {response.text}")
+
+    except requests.exceptions.RequestException as e:
+        logger.error(e)
+        
+update_products_auto_VP()
