@@ -11,6 +11,13 @@ from constantes import PEDIDO_D_PATH, PRODUCTO_PATH, CLIENTS_VP_PATH, SUBZONAS_V
 import json
 app = Flask(__name__)
 
+logger = logging.getLogger('server_logger')
+handler = logging.FileHandler('server.log')
+formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
+
 #CORESUITES
 @app.route('/availabilityCategory', methods=['GET', 'OPTIONS', 'POST'])
 def availabilityCategory():
@@ -76,7 +83,7 @@ def availabilityCategory():
     except Exception as e:
             tb = traceback.format_exc()
             error = f"An error occurred: {e}, traceback: {tb}"
-            print({"CORESUITES": error})
+            logger.error({"CORESUITES": error})
             result = jsonify({"error": error, "tb": tb})
             return (result, 500, HEADERS_ORIGIN)
 
@@ -152,7 +159,7 @@ def roomsByCategory():
     except Exception as e:
             tb = traceback.format_exc()
             error = f"An error occurred: {e}, traceback: {tb}"
-            print({"CORESUITES": error})
+            logger.error({"CORESUITES": error})
             result = jsonify({"error": error, "tb": tb})
             return (result, 500, HEADERS_ORIGIN)
 
@@ -217,13 +224,13 @@ def availability():
         if len(rooms_availables) > 0:
             return jsonify(rooms_availables), 200, HEADERS_ORIGIN
         else:
-            print({"VILLAPLATA": "se hizo una solicitud con exito a availability_villa_plata"})
+            logger.info({"VILLAPLATA": "se hizo una solicitud con exito a availability_villa_plata"})
             return jsonify({"message": "No hay habitaciones disponibles"}), 200, HEADERS_ORIGIN
 
     except Exception as e:
             tb = traceback.format_exc()
             error = f"An error occurred: {e}, traceback: {tb}"
-            print({"VILLAPLATA": error})
+            logger.error({"VILLAPLATA": error})
             result = jsonify({"error": error, "tb": tb})
             return (result, 500, HEADERS_ORIGIN)
 
@@ -238,13 +245,13 @@ def prices():
             prices = getPriceProducts()
             return jsonify(prices), 200, HEADERS_ORIGIN
         else:
-            print({"VILLAPLATA": "se hizo una solicitud con exito a prices_villa_plata"})
+            logger.info({"VILLAPLATA": "se hizo una solicitud con exito a prices_villa_plata"})
             return jsonify({"message": "No hay habitaciones disponibles"}), 200, HEADERS_ORIGIN
 
     except Exception as e:
             tb = traceback.format_exc()
             error = f"An error occurred: {e}, traceback: {tb}"
-            print({"VILLAPLATA": error})
+            logger.error({"VILLAPLATA": error})
             result = jsonify({"error": error, "tb": tb})
             return (result, 500, HEADERS_ORIGIN)
         
