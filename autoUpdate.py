@@ -91,17 +91,19 @@ def update_products_auto_VP():
         if product['CSE_PROD'] == 'RESIDENTES':
             product_list.append({
                 "CSE_PROD": product['CSE_PROD'],
-                "CVE_PROD": product['CVE_PROD'],
-                "DESC_PROD": product['DESC_PROD'],
-                "prices":[]
+                "productKey": product['CVE_PROD'],
+                "description": product['DESC_PROD'],
+                "price":[],
+                "parkName": "Villa Plata"
             })
-    product_list_cve = [product['CVE_PROD'] for product in product_list]
+    product_list_cve = [product['productKey'] for product in product_list]
     for index, prices in prices.iterrows():
         indice = product_list_cve.index(prices['CVE_PROD']) if prices['CVE_PROD'] in product_list_cve else -1
         prices
         if indice != -1:
-            product_list[indice]['prices'].append({
+            product_list[indice]['price'].append({
                     "type": prices['NLISPRE'],
+                    "typeName": "habitación" if prices['NLISPRE'] == 1 else "departamento",
                     "price": prices['LPRECPROD']
             })
                         
@@ -112,6 +114,5 @@ def update_products_auto_VP():
         logger.info(f"Cloud Function response: {response.status_code} - {response.text}")
 
     except requests.exceptions.RequestException as e:
-        logger.error(e)
+        logger.error({"VILLAPLATA-autoupdate": e})
         
-update_products_auto_VP()

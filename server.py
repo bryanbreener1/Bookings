@@ -204,7 +204,7 @@ def getPriceProducts():
         if row['CSE_PROD'] == 'RESIDENTES':
             products_relevants.append(row)
     
-    price_per_product = [ ]
+    price_per_product = []
     for index, row in prices.iterrows():
         if row['CVE_PROD'] in [product['CVE_PROD'] for product in products_relevants]:
             price_per_product.append({

@@ -2,9 +2,9 @@ import os
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from autoUpdate import update_prices_auto, update_products_auto
+from autoUpdate import update_prices_auto, update_products_auto, update_products_auto_VP
 import logging
-from constantes import DIR_TO_WATCH, PRECIOS_PATH, PRODUCTO_PATH
+from constantes import DIR_TO_WATCH, PRECIOS_PATH, PRODUCTO_PATH, PRECIPROD_VP_PATH, PRODUCTO_VP_PATH, DIR_TO_WATCH_VP
 
 logger = logging.getLogger('watchdog_logger')
 handler = logging.FileHandler('nucleaWatchDog.log')
@@ -43,6 +43,9 @@ class Handler(FileSystemEventHandler):
             elif event.src_path == PRODUCTO_PATH:
                 logger.info('Detecté un cambio en PRODUCTO.DBF')
                 update_products_auto()
+            elif event.src_path == PRODUCTO_VP_PATH:
+                logger.info('Detecté un cambio en PRODUCTO_VP.DBF')
+                update_products_auto_VP()
 
 if __name__ == '__main__':
 
@@ -55,7 +58,11 @@ if __name__ == '__main__':
         logger.info(f"El archivo {PRODUCTO_PATH} no existe.")
     else:
         logger.info(f"Archivo a observar: {PRODUCTO_PATH}")
-
+        
+    if not os.path.isfile(PRODUCTO_VP_PATH):
+        logger.info(f"El archivo {PRODUCTO_VP_PATH} no existe.")
+    else:
+        logger.info(f"Archivo a observar: {PRODUCTO_VP_PATH}")
     # Iniciar Watcher
-    w = Watcher(DIR_TO_WATCH)
+    w = Watcher([DIR_TO_WATCH, DIR_TO_WATCH_VP ])
     w.run()
