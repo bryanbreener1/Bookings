@@ -75,7 +75,7 @@ def availabilityCategory():
                     "stock": 1,
                     "unity": "m2",
                     "categoryName":categoryName,
-                    "productKey": int(product['CVE_PROD']) 
+                    "productKey": product['CVE_PROD']
                     })
         
         return jsonify({"rooms": rooms_per_category_availables}), 200, HEADERS_ORIGIN
@@ -151,7 +151,7 @@ def roomsByCategory():
                 "stock": 1,
                 "unity": "m2",
                 "categoryName":categoryName,
-                "productKey": int(product['CVE_PROD']) 
+                "productKey": product['CVE_PROD']
                 })
         
         return jsonify(rooms_availables), 200, HEADERS_ORIGIN

@@ -63,7 +63,7 @@ def update_products_auto():
                 "stock": 1,
                 "unity": "m2",
                 "categoryName": categoryName + ' CON TERRAZA' if product['CVEDE1'] == 2 else categoryName,
-                "productKey": int(product['CVE_PROD']) 
+                "productKey": product['CVE_PROD']
             })
             
     server_data = {"products": product_list}
