@@ -246,7 +246,7 @@ def prices():
             return jsonify(prices), 200, HEADERS_ORIGIN
         else:
             logger.info({"VILLAPLATA": "se hizo una solicitud con exito a prices_villa_plata"})
-            return jsonify({"message": "No hay habitaciones disponibles"}), 200, HEADERS_ORIGIN
+            return jsonify([]), 200, HEADERS_ORIGIN
 
     except Exception as e:
             tb = traceback.format_exc()
