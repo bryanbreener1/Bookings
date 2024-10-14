@@ -185,7 +185,8 @@ def getRoomsAvailable():
             rooms_available.append({
                 "CVE_ZON": row['CVE_ZON'],
                 "CVE_SUB":row['CVE_SUB'],
-                "NOM_SUB":row['NOM_SUB']
+                "NOM_SUB":row['NOM_SUB'],
+                "type": "departamento" if row['CVE_SUB'] in departamentos else "habitación"
             })
             
     return rooms_available
@@ -225,7 +226,7 @@ def availability():
             return jsonify(rooms_availables), 200, HEADERS_ORIGIN
         else:
             logger.info({"VILLAPLATA": "se hizo una solicitud con exito a availability_villa_plata"})
-            return jsonify({"message": "No hay habitaciones disponibles"}), 200, HEADERS_ORIGIN
+            return jsonify([]), 200, HEADERS_ORIGIN
 
     except Exception as e:
             tb = traceback.format_exc()
