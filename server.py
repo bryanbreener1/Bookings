@@ -186,7 +186,8 @@ def getRoomsAvailable():
                 "CVE_ZON": row['CVE_ZON'],
                 "CVE_SUB":row['CVE_SUB'],
                 "NOM_SUB":row['NOM_SUB'],
-                "type": "departamento" if row['CVE_SUB'] in departamentos else "habitación"
+                "typeName": "departamento" if row['CVE_SUB'] in departamentos else "habitación",
+                "type": 2 if row['CVE_SUB'] in departamentos else 1
             })
             
     return rooms_available
