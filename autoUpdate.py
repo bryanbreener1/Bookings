@@ -86,27 +86,31 @@ def update_products_auto_VP():
     prices = pd.DataFrame(iter(price_decoded))
 
     product_list = []
-
+    rent_prices = []
     for index, product in products.iterrows():
         if product['CSE_PROD'] == 'RESIDENTES':
             product_list.append({
                 "CSE_PROD": product['CSE_PROD'],
                 "productKey": product['CVE_PROD'],
                 "description": product['DESC_PROD'],
-                "price":[],
+                "priceVP":[],
                 "parkName": "Villa Plata"
             })
+            
     product_list_cve = [product['productKey'] for product in product_list]
+    prices_room_type = [product for index, product in prices.iterrows() if product['CVE_PROD'] == 'RENTA']
+
     for index, prices in prices.iterrows():
         indice = product_list_cve.index(prices['CVE_PROD']) if prices['CVE_PROD'] in product_list_cve else -1
-        prices
+        
         if indice != -1:
-            product_list[indice]['price'].append({
+            price_type = [precio for precio in prices_room_type if precio['NLISPRE'] == prices['NLISPRE']]
+            product_list[indice]['price'] = round(prices['LPRECPROD'],2)
+            product_list[indice]['priceVP'].append({
                     "type": prices['NLISPRE'],
                     "typeName": "habitación" if prices['NLISPRE'] == 1 else "departamento",
-                    "price": prices['LPRECPROD']
-            })
-                        
+                    "price": round(prices['LPRECPROD'] + price_type[0]['LPRECPROD'],2)
+            })                        
     server_data = {"products": product_list}
     try:
         response = requests.post(f'{END_POINT_CLOUD_FUNCTIONS}/update_products_villa_plata', json=server_data)
@@ -115,4 +119,5 @@ def update_products_auto_VP():
 
     except requests.exceptions.RequestException as e:
         logger.error({"VILLAPLATA-autoupdate": e})
-        
+
+update_products_auto_VP()
