@@ -1,0 +1,15 @@
+2024-10-22 21:37:50,608 INFO Script Watchdog iniciado
+2024-10-22 21:37:50,610 INFO Archivo a observar: ../archivosDBF/PRECIPROD.DBF
+2024-10-22 21:37:50,611 INFO Archivo a observar: ../archivosDBF/PRODUCTO.DBF
+2024-10-22 21:37:50,611 INFO Archivo a observar: ../archivosDBF/producto.dbf
+2024-10-22 21:40:57,614 INFO Script Watchdog iniciado
+2024-10-22 21:40:57,614 INFO Archivo a observar: ../archivosDBF/PRECIPROD.DBF
+2024-10-22 21:40:57,614 INFO Archivo a observar: ../archivosDBF/PRODUCTO.DBF
+2024-10-22 21:40:57,614 INFO Archivo a observar: ../archivosDBF/producto.dbf
+2024-10-22 21:42:18,075 INFO Script Watchdog iniciado
+2024-10-22 21:42:18,076 INFO Archivo a observar: ../archivosDBF/PRECIPROD.DBF
+2024-10-22 21:42:18,076 INFO Archivo a observar: ../archivosDBF/PRODUCTO.DBF
+2024-10-22 21:42:18,076 INFO Archivo a observar: ../archivosDBF/producto.dbf
+2024-10-22 21:42:18,076 INFO Observando cambios en el directorio: ../archivosDBF
+2024-10-22 21:42:18,076 INFO Observando cambios en el directorio: ../archivosDBF
+2024-10-22 21:44:14,244 INFO Observador detenido. Cerrando programa.

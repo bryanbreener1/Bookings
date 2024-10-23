@@ -119,5 +119,3 @@ def update_products_auto_VP():
 
     except requests.exceptions.RequestException as e:
         logger.error({"VILLAPLATA-autoupdate": e})
-
-update_products_auto_VP()

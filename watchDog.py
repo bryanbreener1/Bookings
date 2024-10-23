@@ -22,9 +22,10 @@ class Watcher:
         self.observer = Observer()
 
     def run(self):
-        self.observer.schedule(self.event_handler, self.directory_to_watch, recursive=False)
+        for directory in self.directory_to_watch:
+            self.observer.schedule(self.event_handler, directory, recursive=False)
+            logger.info(f"Observando cambios en el directorio: {directory}")
         self.observer.start()
-        logger.info(f"Observando cambios en el directorio: {self.directory_to_watch}")
         try:
             while True:
                 time.sleep(1)
